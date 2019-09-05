@@ -1,6 +1,8 @@
 import * as http from '@node-scarlet/http'
+import { staticFiles } from './staticfiles'
 
 const s = http.server();
-s.route('GET', '/*', () => 'Hello');
-s.listen(5000);
+s.route('GET', '/*', staticFiles(__dirname + "/static"));
+s.route('GET', '/*', () => 'Hello, World!');
+s.listen(process.env.PORT);
 console.log('listening ...');
