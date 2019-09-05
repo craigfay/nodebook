@@ -1,4 +1,4 @@
-const http = require('@node-scarlet/http');
+import * as http from '@node-scarlet/http'
 
 const s = http.server();
 s.route('GET', '/*', () => 'Hello');
