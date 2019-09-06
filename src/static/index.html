@@ -1,1 +1,34 @@
-<h1>Hello, World!</h1>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Space+Mono&display=swap" rel="stylesheet">
+  <style>
+    div.notebook {
+      margin: 0 auto;
+      display:flex;
+      flex-direction: column;
+      align-content: center;
+      width: 600px;
+    }
+    div.cell {
+      height: 100px;
+      padding: .6rem;
+      font-family: 'Space Mono', monospace;
+      background-color: whitesmoke;
+      margin-bottom: 20px;
+    }
+    div.cell:focus {
+      outline: none;
+    }
+    button.run {
+      padding: .5rem 1rem;
+      width: 200px;
+      background: purple;
+      color: white;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+
+<div class="notebook">
+  <div class="cell" contenteditable></div>
+  <button class="run">Execute</button>
+</div>
