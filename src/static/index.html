@@ -18,17 +18,30 @@
     div.cell:focus {
       outline: none;
     }
+    div.output {
+      padding: .6rem;
+      font-family: 'Space Mono', monospace;
+      background-color: whitesmoke;
+      margin-bottom: 20px;
+      color: darkgreen;
+    }
+    div.output:empty {
+      display: none;
+    }
     button.run {
       padding: .5rem 1rem;
       width: 200px;
       background: purple;
       color: white;
       text-transform: uppercase;
+      margin-bottom: 20px;
     }
+    
   </style>
 </head>
 
 <div class="notebook">
   <div class="cell" contenteditable></div>
+  <div class="output"></div>
   <button class="run">Execute</button>
 </div>
