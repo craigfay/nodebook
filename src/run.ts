@@ -4,15 +4,15 @@
  */
 
 import { exec } from 'child_process'
-import { readFile, writeFile } from 'fs'
+import { writeFile, mkdir } from 'fs'
 import { randomBytes } from 'crypto'
 import { promisify } from 'util'
 const asyncExec = promisify(exec)
-const asyncRead = promisify(readFile)
 const asyncWrite = promisify(writeFile)
+const asyncMkdir = promisify(mkdir)
 
 export async function run(javascript:string) {
-  const packageJson = JSON.stringify({
+  const json = JSON.stringify({
     "name": "nb",
     "version": "1.0.0",
     "description": "",
@@ -25,12 +25,15 @@ export async function run(javascript:string) {
     }
   });
 
-  // Generate Unique Container ID
-  const containerId = randomBytes(16).toString('base64')
+  // Generate Unique Container ID and corresponding volume path
+  const containerId = randomBytes(16).toString('hex')
+  const volume = `${__dirname}/containers/${containerId}`
 
   // Write files for the container to use
-  await asyncWrite(`containers/${containerId}/package.json`, packageJson)
-  await asyncWrite(`containers/${containerId}/index.js`, javascript)
+  asyncMkdir(volume).then(function() {
+    asyncWrite(`${volume}/index.js`, javascript)
+    asyncWrite(`${volume}/package.json`, json)
+  })
 
   // Command that will spin up the container
   const dockerCommand = `
@@ -45,6 +48,9 @@ export async function run(javascript:string) {
     '
  `.split('\n').join(' ')
 
-  const { stdout } = await asyncExec(dockerCommand)
+ const { stdout } = await asyncExec(dockerCommand)
+ const cleanup = setTimeout(function() {
+   asyncExec(`rm -rf ${__dirname}/containers/${containerId}`)
+  }, 10000)
   return stdout;
 }
