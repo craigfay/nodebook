@@ -4,8 +4,11 @@
  */
 
 import { exec } from 'child_process'
+import { readFile, writeFile, fstat } from 'fs';
 import { promisify } from 'util'
 const asyncExec = promisify(exec)
+const asyncRead = promisify(readFile)
+const asyncWrite = promisify(writeFile)
 
 export async function run(javascript:string) {
   const packageJson = JSON.stringify({
@@ -21,14 +24,18 @@ export async function run(javascript:string) {
     }
   });
 
+  await asyncWrite('containers/1/package.json', packageJson);
+  await asyncWrite('containers/1/main.js', javascript);
+
   const dockerCommand = `
     docker run
-    --workdir=""
+    --volume="${__dirname}/containers/1/:/src"
+    --workdir="/src"
     node:12
-    bash -c "
-      printf '${packageJson.split('"').join('\\"')}' > package.json;
-      npm install;
-    "
+    bash -c ' 
+      pwd;
+      ls;
+    '
  `.split('\n').join(' ')
 
   const { stdout } = await asyncExec(dockerCommand)
