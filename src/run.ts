@@ -12,14 +12,7 @@ const asyncWrite = promisify(writeFile)
 const asyncMkdir = promisify(mkdir)
 
 export async function run(javascript:string) {
-  const json = JSON.stringify({
-    "name": "nb",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
+  const packageDotJson = JSON.stringify({
     "dependencies": {
       "lodash": "^4.17.15"
     }
@@ -32,7 +25,7 @@ export async function run(javascript:string) {
   // Write files for the container to use
   asyncMkdir(volume).then(function() {
     asyncWrite(`${volume}/index.js`, javascript)
-    asyncWrite(`${volume}/package.json`, json)
+    asyncWrite(`${volume}/package.json`, packageDotJson)
   })
 
   // Command that will spin up the container
@@ -42,7 +35,7 @@ export async function run(javascript:string) {
     --workdir="/src"
     --rm
     node:12
-    bash -c ' 
+    bash -c '
       npm install;
       node index.js;
     '
