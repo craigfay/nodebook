@@ -12,7 +12,6 @@ const asyncWrite = promisify(writeFile)
 const asyncMkdir = promisify(mkdir)
 
 export async function run(dependencies:string, javascript:string) {
-  console.log({ dependencies, javascript })
   // Generate Unique Container ID and corresponding volume path
   const containerId = randomBytes(16).toString('hex')
   const volume = `${__dirname}/containers/${containerId}`
@@ -31,8 +30,8 @@ export async function run(dependencies:string, javascript:string) {
     --rm
     node:12
     bash -c '
-      npm install;
-      node index;
+      npm install
+      && node index.js
     '
   `.split('\n').join(' ')
 
