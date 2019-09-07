@@ -25,23 +25,20 @@ export async function run(javascript:string) {
   });
 
   await asyncWrite('containers/1/package.json', packageJson);
-  await asyncWrite('containers/1/main.js', javascript);
+  await asyncWrite('containers/1/index.js', javascript);
 
   const dockerCommand = `
     docker run
     --volume="${__dirname}/containers/1/:/src"
     --workdir="/src"
+    --rm
     node:12
     bash -c ' 
-      pwd;
-      ls;
+      npm install;
+      node index.js;
     '
  `.split('\n').join(' ')
 
   const { stdout } = await asyncExec(dockerCommand)
   return stdout;
 }
-
-// echo ${packageJson} > package.json 
-// && npm install
-// && node -e "${javascript}"
