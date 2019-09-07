@@ -16,28 +16,38 @@ export async function run(dependencies:string, javascript:string) {
   const containerId = randomBytes(16).toString('hex')
   const volume = `${__dirname}/containers/${containerId}`
 
-  // Write files for the container to use
-  asyncMkdir(volume, { recursive: true }).then(function() {
-    asyncWrite(`${volume}/index.js`, javascript)
-    asyncWrite(`${volume}/package.json`, dependencies)
-  })
-
-  // Command that will spin up the container
-  const dockerCommand = `
-    docker run
-    --volume="${__dirname}/containers/${containerId}/:/src"
-    --workdir="/src"
-    --rm
-    node:12
-    bash -c '
-      npm install
-      && node index.js
-    '
-  `.split('\n').join(' ')
-
-  const { stdout } = await asyncExec(dockerCommand)
-  const cleanup = setTimeout(function() {
+  // Remove all artifacts after 10 seconds
+  const cleanup = () => setTimeout(function() {
     asyncExec(`rm -rf ${volume}`)
   }, 10000)
-  return stdout;
+
+  try {
+    // Write files for the container to use
+    asyncMkdir(volume, { recursive: true }).then(function() {
+      asyncWrite(`${volume}/index.js`, javascript)
+      asyncWrite(`${volume}/package.json`, dependencies)
+    })
+    
+    // Command that will spin up the container
+    const dockerCommand = `
+      docker run
+      --volume="${volume}/:/src"
+      --workdir="/src"
+      --rm
+      node:12
+      bash -c '
+        npm install
+        && node index.js
+      '
+    `.split('\n').join(' ')
+
+    // Return the console output of the command, then remove artifacts
+    const { stdout } = await asyncExec(dockerCommand)
+    cleanup()
+    return stdout
+
+  } catch (e) { // Failure
+    cleanup()
+    return e
+  }
 }
