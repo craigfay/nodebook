@@ -41,20 +41,30 @@
 </head>
 
 <div class="notebook">
-  <div class="cell" contenteditable></div>
+  <h3>package.json</h3>
+  <div class="dependencies cell" contenteditable></div>
+
+  <h3>index.js</h3>
+  <div class="javascript cell" contenteditable></div>
   <div class="output"></div>
   <button class="run">Run</button>
 </div>
 
 <script>
   const endpoint = '/api/run'
+  const replaceNonBreakingSpaces = str => str.replace(/\u00a0/g, " ");
 
-  const cell = document.querySelector('.cell')
+  const dependencies = document.querySelector('.dependencies.cell')
+  const javascript = document.querySelector('.javascript.cell')
   const run = document.querySelector('.run')
   run.addEventListener('click', async function() {
     const response = await fetch(endpoint, {
       method: 'POST',
-      body: cell.innerText,
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        dependencies: replaceNonBreakingSpaces(dependencies.innerText),
+        javascript: replaceNonBreakingSpaces(javascript.innerText),
+      })
     });
 
     if (!response.ok) return;

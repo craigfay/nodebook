@@ -11,13 +11,8 @@ const asyncExec = promisify(exec)
 const asyncWrite = promisify(writeFile)
 const asyncMkdir = promisify(mkdir)
 
-export async function run(javascript:string) {
-  const packageDotJson = JSON.stringify({
-    "dependencies": {
-      "lodash": "^4.17.15"
-    }
-  });
-
+export async function run(dependencies:string, javascript:string) {
+  console.log({ dependencies, javascript })
   // Generate Unique Container ID and corresponding volume path
   const containerId = randomBytes(16).toString('hex')
   const volume = `${__dirname}/containers/${containerId}`
@@ -25,7 +20,7 @@ export async function run(javascript:string) {
   // Write files for the container to use
   asyncMkdir(volume, { recursive: true }).then(function() {
     asyncWrite(`${volume}/index.js`, javascript)
-    asyncWrite(`${volume}/package.json`, packageDotJson)
+    asyncWrite(`${volume}/package.json`, dependencies)
   })
 
   // Command that will spin up the container
@@ -37,13 +32,13 @@ export async function run(javascript:string) {
     node:12
     bash -c '
       npm install;
-      node index.js;
+      node index;
     '
- `.split('\n').join(' ')
+  `.split('\n').join(' ')
 
- const { stdout } = await asyncExec(dockerCommand)
- const cleanup = setTimeout(function() {
-   asyncExec(`rm -rf ${__dirname}/containers/${containerId}`)
+  const { stdout } = await asyncExec(dockerCommand)
+  const cleanup = setTimeout(function() {
+    asyncExec(`rm -rf ${volume}`)
   }, 10000)
   return stdout;
 }
