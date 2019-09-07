@@ -23,7 +23,7 @@ export async function run(javascript:string) {
   const volume = `${__dirname}/containers/${containerId}`
 
   // Write files for the container to use
-  asyncMkdir(volume).then(function() {
+  asyncMkdir(volume, { recursive: true }).then(function() {
     asyncWrite(`${volume}/index.js`, javascript)
     asyncWrite(`${volume}/package.json`, packageDotJson)
   })
