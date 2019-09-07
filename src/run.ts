@@ -24,8 +24,8 @@ export async function run(dependencies:string, javascript:string) {
   try {
     // Write files for the container to use
     asyncMkdir(volume, { recursive: true }).then(function() {
-      asyncWrite(`${volume}/index.js`, javascript)
-      asyncWrite(`${volume}/package.json`, dependencies)
+      if (dependencies) asyncWrite(`${volume}/package.json`, dependencies)
+      if (javascript) asyncWrite(`${volume}/index.js`, javascript)
     })
     
     // Command that will spin up the container
