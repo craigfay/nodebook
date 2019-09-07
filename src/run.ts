@@ -4,7 +4,8 @@
  */
 
 import { exec } from 'child_process'
-import { readFile, writeFile, fstat } from 'fs';
+import { readFile, writeFile } from 'fs'
+import { randomBytes } from 'crypto'
 import { promisify } from 'util'
 const asyncExec = promisify(exec)
 const asyncRead = promisify(readFile)
@@ -24,12 +25,17 @@ export async function run(javascript:string) {
     }
   });
 
-  await asyncWrite('containers/1/package.json', packageJson);
-  await asyncWrite('containers/1/index.js', javascript);
+  // Generate Unique Container ID
+  const containerId = randomBytes(16).toString('base64')
 
+  // Write files for the container to use
+  await asyncWrite(`containers/${containerId}/package.json`, packageJson)
+  await asyncWrite(`containers/${containerId}/index.js`, javascript)
+
+  // Command that will spin up the container
   const dockerCommand = `
     docker run
-    --volume="${__dirname}/containers/1/:/src"
+    --volume="${__dirname}/containers/${containerId}/:/src"
     --workdir="/src"
     --rm
     node:12
