@@ -1,10 +1,15 @@
 version: '3'
 services:
   node:
-    image: node:10
+    build:
+      context: ./
+      dockerfile: Dockerfile.node
     command: npm run start
     volumes:
       - "./src:/src"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "~/volumes:/volumes"
+      # curl -H 'Content-Type: application/json' --unix-socket /var/run/docker.sock localhost:4243/containers/zabbix-agent/exec -d '{"Cmd":["date"]}'
     working_dir: "/src"
     ports:
       - "8080:8080"
@@ -16,4 +21,3 @@ services:
     volumes:
       - "./src:/src"
     working_dir: "/src"
-

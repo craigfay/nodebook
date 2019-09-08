@@ -13,13 +13,13 @@ const asyncMkdir = promisify(mkdir)
 
 export async function run(dependencies:string, javascript:string) {
   // Generate Unique Container ID and corresponding volume path
-  const containerId = randomBytes(16).toString('hex')
-  const volume = `${__dirname}/containers/${containerId}`
+  const volumeId = randomBytes(16).toString('hex')
+  const volume = `/volumes/${volumeId}`
 
-  // Remove all artifacts after 10 seconds
+  // Remove all artifacts after 60 seconds
   const cleanup = () => setTimeout(function() {
     asyncExec(`rm -rf ${volume}`)
-  }, 10000)
+  }, 60000)
 
   try {
     // Write files for the container to use
@@ -31,13 +31,12 @@ export async function run(dependencies:string, javascript:string) {
     // Command that will spin up the container
     const dockerCommand = `
       docker run
-      --volume="${volume}/:/code"
+      --volume="${volume}:/code"
       --workdir="/code"
       --rm
       node:12
       bash -c '
-        npm install
-        && node index.js
+        echo $HOME
       '
     `.split('\n').join(' ')
 
