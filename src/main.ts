@@ -10,4 +10,4 @@ s.route('POST', '/api/run', async (req, meta) => {
 });
 
 s.listen(process.env.PORT);
-console.log('listening ...');
+console.log('listening over port', process.env.PORT);
