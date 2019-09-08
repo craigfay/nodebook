@@ -3,6 +3,7 @@ import { staticFiles } from './staticfiles'
 import { run } from './run'
 
 const s = http.server();
+s.route('GET', '/*', () => console.log('request...'));
 s.route('GET', '/*', staticFiles(__dirname + "/static"));
 s.route('POST', '/api/run', async (req, meta) => {
   const { dependencies, javascript } = req.body;

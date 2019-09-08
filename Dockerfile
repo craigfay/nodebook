@@ -1,3 +1,7 @@
+# Usage:
+#   Build: `docker build . -t nb`
+#   Run: `docker run -t -p 8080:8080 nb`
+
 FROM ubuntu:latest
 
 # Update package manager
@@ -18,6 +22,5 @@ COPY . .
 WORKDIR /src
 RUN npm install
 
-EXPOSE 8080
 ENV PORT=8080
-CMD ["/bin/bash", "npm run start"]
+CMD npm run start
