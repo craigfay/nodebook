@@ -56,7 +56,7 @@
 
 <script>
   const endpoint = '/api/run'
-  const replaceNonBreakingSpaces = str => str.replace(/\u00a0/g, " ");
+  const replaceNonBreakingSpaces = str => str.replace(/\u00a0/g, " ")
 
   const dependencies = document.querySelector('.cell .dependencies')
   const input = document.querySelector('.cell .input')
@@ -69,10 +69,10 @@
         dependencies: replaceNonBreakingSpaces(dependencies.innerText),
         javascript: replaceNonBreakingSpaces(input.innerText),
       })
-    });
+    })
 
-    if (!response.ok) return;
-    const output = await response.text();
-    document.querySelector('.cell .output').innerText = output;
+    if (!response.ok) return
+    const output = await response.text()
+    document.querySelector('.cell .output').innerText = output
   })
 </script>
