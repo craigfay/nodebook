@@ -16,8 +16,9 @@ services:
     environment:
       PORT: 8080
 
-  docker:
-    image: docker:latest
+  data_volume_host:
+    container_name: data_volume_host
+    image: debian:latest
     volumes:
-      - "./src:/src"
-    working_dir: "/src"
+      - "~/volumes:/volumes"
+    working_dir: "/volumes"
