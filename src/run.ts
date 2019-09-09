@@ -27,6 +27,9 @@ export async function run(dependencies:string, javascript:string) {
       if (dependencies) asyncWrite(`${volume}/package.json`, dependencies)
       if (javascript) asyncWrite(`${volume}/index.js`, javascript)
     })
+
+    // Run npm install for the new container, which has read-only access
+    const installation = await asyncExec(`npm install --prefix ${volume}`)
     
     // Command that will spin up the container
     const dockerCommand = `
@@ -36,15 +39,16 @@ export async function run(dependencies:string, javascript:string) {
       --rm
       node:12
       bash -c '
-        pwd
-        && ls
+        node index.js
       '
     `.split('\n').join(' ')
 
     // Return the console output of the command, then remove artifacts
-    const { stdout } = await asyncExec(dockerCommand)
-    cleanup()
-    return stdout
+    if (installation) {
+      const { stdout } = await asyncExec(dockerCommand)
+      cleanup()
+      return stdout
+    }
 
   } catch (e) { // Failure
     cleanup()
