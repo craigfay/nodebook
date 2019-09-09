@@ -1,6 +1,8 @@
 /**
  * Spin up a docker container to execute
  * an arbitrary Javascript string
+ * 
+ * @TODO Allow clients to specify node version
  */
 
 import { exec } from 'child_process'
@@ -12,9 +14,9 @@ const asyncWrite = promisify(writeFile)
 const asyncMkdir = promisify(mkdir)
 
 export async function run(dependencies:string, javascript:string) {
-  // Generate Unique Container ID and corresponding volume path
-  const volumeId = randomBytes(16).toString('hex')
-  const volume = `/volumes/${volumeId}`
+  // Generate a subdirectory name to allocate to a sibling container
+  const hash = randomBytes(16).toString('hex')
+  const volume = `/volumes/${hash}`
 
   // Remove all artifacts after 60 seconds
   const cleanup = () => setTimeout(function() {
@@ -22,16 +24,16 @@ export async function run(dependencies:string, javascript:string) {
   }, 60000)
 
   try {
-    // Write files for the container to use
+    // Create files for the container to use
     asyncMkdir(volume, { recursive: true }).then(function() {
       if (dependencies) asyncWrite(`${volume}/package.json`, dependencies)
       if (javascript) asyncWrite(`${volume}/index.js`, javascript)
     })
 
-    // Run npm install for the new container, which has read-only access
+    // Run npm install for the new container
     const installation = await asyncExec(`npm install --prefix ${volume}`)
     
-    // Command that will spin up the container
+    // Command that will spin up a sibling container
     const dockerCommand = `
       docker run
       --volume ${process.env.HOME}${volume}:/code
