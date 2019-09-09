@@ -5,7 +5,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    command: npm run start
+    command: npm run watch
     volumes:
       - "./src:/src"
       - "/var/run/docker.sock:/var/run/docker.sock"
