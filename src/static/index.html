@@ -13,11 +13,19 @@
     }
     .cell {
       margin-bottom: 20px;
+      border-radius: 5px;
+      border: 1px solid gainsboro;
+      padding: 20px;
+    }
+    .cell .title {
+      margin-bottom: 10px;
+      color: darkslategray;
     }
     .cell .input {
       padding: .6rem;
       font-family: 'Roboto Mono', monospace;
       background-color: whitesmoke;
+      border-radius: 5px;
     }
     .cell .input:focus {
       outline: none;
@@ -43,13 +51,13 @@
 </head>
 
 <div class="notebook">
-  <h4>PACKAGE.JSON</h4>
   <div class="cell">
+    <div class="title">package.json</div>
     <div class="input dependencies" contenteditable></div>
   </div>
 
-  <h4>INDEX.JS</h4>
   <div class="cell">
+    <div class="title">index.js</div>
     <div class="input code" contenteditable></div>
     <div class="output code"></div>
   </div>
