@@ -76,6 +76,8 @@
   const dependencies = document.querySelector('.cell .input.dependencies')
   const input = document.querySelector('.cell .input.code')
   const run = document.querySelector('.run')
+  const dependenciesOutput = document.querySelector('.output.dependencies');
+  const codeOutput = document.querySelector('.output.code')
   run.addEventListener('click', async function() {
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -86,9 +88,10 @@
       })
     })
 
+    // Handle Response
     if (!response.ok) return
     const { installation, execution }= await response.json()
-    document.querySelector('.output.dependencies').innerText = installation
-    document.querySelector('.output.code').innerText = execution 
+    dependenciesOutput.innerText = installation
+    codeOutput.innerText = execution 
   })
 </script>
