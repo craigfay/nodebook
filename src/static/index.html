@@ -79,6 +79,11 @@
   const dependenciesOutput = document.querySelector('.output.dependencies');
   const codeOutput = document.querySelector('.output.code')
   run.addEventListener('click', async function() {
+    // Show "loading" message
+    dependenciesOutput.innerText = 'loading...'
+    codeOutput.innerText = 'loading...'
+
+    // Send Request
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -90,7 +95,7 @@
 
     // Handle Response
     if (!response.ok) return
-    const { installation, execution }= await response.json()
+    const { installation, execution } = await response.json()
     dependenciesOutput.innerText = installation
     codeOutput.innerText = execution 
   })
