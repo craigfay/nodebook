@@ -3,7 +3,6 @@
  * an arbitrary Javascript string
  * 
  * @TODO Allow clients to specify node version
- * @TODO fix "undefined" output bug
  */
 
 import { exec } from 'child_process'
