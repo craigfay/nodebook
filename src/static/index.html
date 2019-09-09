@@ -1,6 +1,9 @@
 <head>
-  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono&display=swap" rel="stylesheet">
   <style>
+    * {
+      font-family: 'Roboto Mono', sans-serif;
+    }
     div.notebook {
       margin: 0 auto;
       display:flex;
@@ -40,15 +43,15 @@
 </head>
 
 <div class="notebook">
-  <h3>package.json</h3>
+  <h4>PACKAGE.JSON</h4>
   <div class="cell">
-    <div class="dependencies" contenteditable></div>
+    <div class="input dependencies" contenteditable></div>
   </div>
 
-  <h3>index.js</h3>
+  <h4>INDEX.JS</h4>
   <div class="cell">
-    <div class="input" contenteditable></div>
-    <div class="output"></div>
+    <div class="input code" contenteditable></div>
+    <div class="output code"></div>
   </div>
 
   <button class="run">Run</button>
@@ -58,8 +61,8 @@
   const endpoint = '/api/run'
   const replaceNonBreakingSpaces = str => str.replace(/\u00a0/g, " ")
 
-  const dependencies = document.querySelector('.cell .dependencies')
-  const input = document.querySelector('.cell .input')
+  const dependencies = document.querySelector('.cell .input.dependencies')
+  const input = document.querySelector('.cell .input.code')
   const run = document.querySelector('.run')
   run.addEventListener('click', async function() {
     const response = await fetch(endpoint, {
@@ -73,6 +76,6 @@
 
     if (!response.ok) return
     const output = await response.text()
-    document.querySelector('.cell .output').innerText = output
+    document.querySelector('.cell .output.code').innerText = output
   })
 </script>
