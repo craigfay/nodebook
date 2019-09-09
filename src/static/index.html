@@ -1,5 +1,5 @@
 <head>
-  <link href="https://fonts.googleapis.com/css?family=Space+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
   <style>
     div.notebook {
       margin: 0 auto;
@@ -8,24 +8,23 @@
       align-content: center;
       width: 600px;
     }
-    div.cell {
-      /* height: 100px; */
-      padding: .6rem;
-      font-family: 'Space Mono', monospace;
-      background-color: whitesmoke;
+    .cell {
       margin-bottom: 20px;
     }
-    div.cell:focus {
+    .cell .input {
+      padding: .6rem;
+      font-family: 'Roboto Mono', monospace;
+      background-color: whitesmoke;
+    }
+    .cell .input:focus {
       outline: none;
     }
-    div.output {
+    .cell .output {
       padding: .6rem;
-      font-family: 'Space Mono', monospace;
-      background-color: whitesmoke;
-      margin-bottom: 20px;
+      font-family: 'Roboto Mono', monospace;
       color: darkgreen;
     }
-    div.output:empty {
+    .output:empty {
       display: none;
     }
     button.run {
@@ -42,11 +41,16 @@
 
 <div class="notebook">
   <h3>package.json</h3>
-  <div class="dependencies cell" contenteditable></div>
+  <div class="cell">
+    <div class="dependencies" contenteditable></div>
+  </div>
 
   <h3>index.js</h3>
-  <div class="javascript cell" contenteditable></div>
-  <div class="output"></div>
+  <div class="cell">
+    <div class="input" contenteditable></div>
+    <div class="output"></div>
+  </div>
+
   <button class="run">Run</button>
 </div>
 
@@ -54,8 +58,8 @@
   const endpoint = '/api/run'
   const replaceNonBreakingSpaces = str => str.replace(/\u00a0/g, " ");
 
-  const dependencies = document.querySelector('.dependencies.cell')
-  const javascript = document.querySelector('.javascript.cell')
+  const dependencies = document.querySelector('.cell .dependencies')
+  const input = document.querySelector('.cell .input')
   const run = document.querySelector('.run')
   run.addEventListener('click', async function() {
     const response = await fetch(endpoint, {
@@ -63,12 +67,12 @@
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         dependencies: replaceNonBreakingSpaces(dependencies.innerText),
-        javascript: replaceNonBreakingSpaces(javascript.innerText),
+        javascript: replaceNonBreakingSpaces(input.innerText),
       })
     });
 
     if (!response.ok) return;
     const output = await response.text();
-    document.querySelector('.output').innerText = output;
+    document.querySelector('.cell .output').innerText = output;
   })
 </script>
