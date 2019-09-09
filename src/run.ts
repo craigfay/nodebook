@@ -13,6 +13,9 @@ import { promisify } from 'util'
 const asyncExec = promisify(exec)
 const asyncWrite = promisify(writeFile)
 const asyncMkdir = promisify(mkdir)
+const INSTALL_ERROR = 'Could not install dependencies'
+const ALLOCATE_ERROR = 'Could not allocate execution file space'
+const CONTAINER_ERROR = 'Could not create an execution run time'
 
 export async function run(dependencies:string, javascript:string) {
   // Generate a subdirectory name to allocate to a sibling container
@@ -25,16 +28,17 @@ export async function run(dependencies:string, javascript:string) {
   }, 60000)
 
   try {
-    // Create files for the container to use
+    // Allocate files for the container to use
     asyncMkdir(volume, { recursive: true }).then(function() {
       if (dependencies) asyncWrite(`${volume}/package.json`, dependencies)
       if (javascript) asyncWrite(`${volume}/index.js`, javascript)
-    })
+    }).catch(e => { throw  ALLOCATE_ERROR })
 
     // Run npm install for the new container
     const installation = await asyncExec(`npm install --prefix ${volume}`)
+      .catch(e => { throw INSTALL_ERROR})
     
-    // Command that will spin up a sibling container
+    // The command that will spin up a sibling container
     const dockerCommand = `
       docker run
       --volume ${process.env.HOME}${volume}:/code
@@ -44,9 +48,11 @@ export async function run(dependencies:string, javascript:string) {
       node index.js
     `.split('\n').join(' ')
 
-    // Return the console output of the command, then remove artifacts
+    // Return the console output of the command, schedule artifact removal
     if (installation || !dependencies) {
       const execution = await asyncExec(dockerCommand)
+        .catch(e => { throw CONTAINER_ERROR })
+
       cleanup()
       return {
         installation: installation.stdout,
@@ -56,6 +62,15 @@ export async function run(dependencies:string, javascript:string) {
 
   } catch (e) { // Failure
     cleanup()
-    return e
+    switch(e) {
+      case INSTALL_ERROR:
+        return { installation: INSTALL_ERROR }
+      case ALLOCATE_ERROR:
+        return { execution: ALLOCATE_ERROR }
+      case CONTAINER_ERROR:
+        return { execution: CONTAINER_ERROR }
+      default:
+        return { execution: 'An unexpected error occurred' }
+    }
   }
 }
