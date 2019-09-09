@@ -1,3 +1,4 @@
+# Usage: HOME=$HOME docker-compose up
 version: '3'
 services:
   node:
@@ -15,10 +16,3 @@ services:
     environment:
       PORT: 8080
       HOME: "${HOME}"
-
-  data_volume_host:
-    container_name: data_volume_host
-    image: debian:latest
-    volumes:
-      - "~/volumes:/volumes"
-    working_dir: "/volumes"
