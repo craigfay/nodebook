@@ -54,6 +54,7 @@
   <div class="cell">
     <div class="title">package.json</div>
     <div class="input dependencies" contenteditable></div>
+    <div class="output dependencies"></div>
   </div>
 
   <div class="cell">
@@ -83,7 +84,8 @@
     })
 
     if (!response.ok) return
-    const output = await response.text()
-    document.querySelector('.cell .output.code').innerText = output
+    const { installation, execution }= await response.json()
+    document.querySelector('.output.dependencies').innerText = installation
+    document.querySelector('.output.code').innerText = execution 
   })
 </script>

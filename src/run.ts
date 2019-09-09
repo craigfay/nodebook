@@ -45,9 +45,12 @@ export async function run(dependencies:string, javascript:string) {
 
     // Return the console output of the command, then remove artifacts
     if (installation || !dependencies) {
-      const { stdout } = await asyncExec(dockerCommand)
+      const execution = await asyncExec(dockerCommand)
       cleanup()
-      return stdout
+      return {
+        installation: installation.stdout,
+        execution: execution.stdout,
+      }
     }
 
   } catch (e) { // Failure
