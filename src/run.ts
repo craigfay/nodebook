@@ -31,8 +31,8 @@ export async function run(dependencies:string, javascript:string) {
     // Command that will spin up the container
     const dockerCommand = `
       docker run
-      --volumes-from data_volume_host
-      --workdir="/volumes"
+      --volumes-from data_volume_host:ro
+      --workdir="${volume}"
       --rm
       node:12
       bash -c '
