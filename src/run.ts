@@ -10,6 +10,7 @@ import { promisify } from 'util'
 const asyncExec = promisify(exec)
 const asyncWrite = promisify(writeFile)
 const asyncMkdir = promisify(mkdir)
+const { HOME } = process.env
 
 export async function run(dependencies:string, javascript:string) {
   // Generate Unique Container ID and corresponding volume path
@@ -34,17 +35,19 @@ export async function run(dependencies:string, javascript:string) {
     // Command that will spin up the container
     const dockerCommand = `
       docker run
-      --volumes-from data_volume_host:ro
-      --workdir="${volume}"
+      --volume ${HOME}${volume}:/code
+      --workdir="/code"
       --rm
       node:12
-      bash -c '
-        node index.js
-      '
+      node index.js
+    `.split('\n').join(' ')
+
+    const testCommand = `
+      echo $(echo $HOME)${volume}
     `.split('\n').join(' ')
 
     // Return the console output of the command, then remove artifacts
-    if (installation) {
+    if (installation || !dependencies) {
       const { stdout } = await asyncExec(dockerCommand)
       cleanup()
       return stdout
