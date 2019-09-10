@@ -1,3 +1,4 @@
+const pipe = (...fns) => x => fns.reduce((v, f) => f(v), x)
 
 function codeCell(source) {
   return {
@@ -16,5 +17,9 @@ function push(cells, newCell) {
   return [...cells, newCell]
 }
 
-const notebook = []
-push(notebook, codeCell('console.log(5)'));
+const notebook = pipe(
+  cells => push(cells, codeCell('console.log(5)')),
+  cells => push(cells, codeCell('console.log(10)')),
+)([])
+
+console.log({ notebook })
