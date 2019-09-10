@@ -1,4 +1,10 @@
-const build = (...fns) => fns.reduce((v, f) => f(v), []);
+const base = { cells: [] }
+const build = (...fns) => fns.reduce((v, f) => f(v), base)
+
+function push(notebook, newCell) {
+  const { cells, ...rest } = notebook
+  return  { cells: [...cells, newCell], ...rest }
+}
 
 function codeCell(content) {
   return {
@@ -14,19 +20,16 @@ function textCell(content) {
   }
 }
 
-function run(cells) {
-  const codeCells = cells.filter(cell => cell.cellType == 'code');
+function run(notebook) {
+  const codeCells = notebook.cells.filter(cell => cell.cellType == 'code');
   const contents = codeCells.map(cell => cell.content);
   eval(contents.join('\n'));
 }
 
-function push(cells, newCell) {
-  return [...cells, newCell]
-}
-
-const notebook = build(
-  cells => push(cells, codeCell('console.log(5)')),
-  cells => push(cells, codeCell('console.log(10)')),
+const instance = build(
+  notebook => push(notebook, codeCell('console.log(5)')),
+  notebook => push(notebook, textCell('hello there')),
+  notebook => push(notebook, codeCell('console.log(10)')),
 )
 
-console.log({ notebook })
+run(instance)
