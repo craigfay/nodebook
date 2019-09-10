@@ -1,44 +1,13 @@
-const base = { cells: [] }
-const build = (...fns) => fns.reduce((v, f) => f(v), base)
+const cellDelimiter = '*endcell*'
 
-function push(notebook, newCell) {
-  const { cells, ...rest } = notebook
-  return  { cells: [...cells, newCell], ...rest }
+// Convert a notebook into a format that can be run by the "run" module
+function parse(notebook) {
+  let dependencies
+  const javascript = notebook.cells.map(cell => {
+    if (cell.celltype == 'package') dependencies = cell.content
+    if (cell.celltype == 'code') return cell.content
+    else return `\nconsole.log("${cellDelimiter}")\n`
+  })
+  return { dependencies, javascript }
 }
 
-
-
-function packageCell(content) {
-  return {
-    cellType: 'package',
-    content,
-  }
-}
-
-function codeCell(content) {
-  return {
-    cellType: 'code',
-    content,
-  }
-}
-
-function textCell(content) {
-  return {
-    cellType: 'text',
-    content,
-  }
-}
-
-// function run(notebook) {
-  // const codeCells = notebook.cells.filter(cell => cell.cellType == 'code')
-  // const contents = codeCells.map(cell => cell.content)
-  // eval(contents.join('\n' + 'console.log("*end_cell*")' + '\n'))
-// }
-
-const instance = build(
-  notebook => push(notebook, codeCell('console.log(5)')),
-  notebook => push(notebook, textCell('hello there')),
-  notebook => push(notebook, codeCell('console.log(10)')),
-)
-
-run(instance)
