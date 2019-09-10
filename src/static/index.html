@@ -104,13 +104,13 @@
     packageCellOutput.innerText = 'loading...'
     codeCellOutput.innerText = 'loading...'
 
-    // Add cells to notebook
-    const cellsInputs = document.querySelectorAll('.cell.input')
-    for (const input of cellInputs) {
+    // Add cells to notebook object
+    const cellInputs = document.querySelectorAll('.cell .input')
+    notebook.cells = Array.from(cellInputs).map(input => {
       const { celltype } = input.dataset
       const content = input.innerText
-      notebook.cells.push({ celltype, content })
-    }
+      return { celltype, content }
+    })
 
     // Send Request
     const response = await fetch(endpoint, {
@@ -139,16 +139,4 @@
       }
     })
   })
-
-  const cellTypes = {
-    package: function packageCell(content) {
-      return { content }
-    },
-    code: function codeCell(content) {
-      return { content }
-    },
-    text: function textCell(content) {
-      return { content }
-    },
-  }
 </script>
