@@ -4,6 +4,7 @@
  * 
  * @TODO Allow clients to specify node version
  * @TODO Maybe show clients stderr
+ * @TODO Syntax Highlighting
  */
 
 import { exec } from 'child_process'

@@ -67,22 +67,22 @@
     <div class="output"></div>
   </div>
 
-  <button class="run">Run</button>
+  <button class="submit">Run</button>
 </div>
 
 <script>
   const endpoint = '/api/run'
   const replaceNonBreakingSpaces = str => str.replace(/\u00a0/g, " ")
 
-  const dependencies = document.querySelector('.package.cell .input')
-  const input = document.querySelector('.code.cell .input')
-  const run = document.querySelector('.run')
-  const dependenciesOutput = document.querySelector('.package.cell .output');
-  const codeOutput = document.querySelector('.code.cell .output')
+  const packageCellInput = document.querySelector('.package.cell .input')
+  const codeCellInput = document.querySelector('.code.cell .input')
+  const submitButton = document.querySelector('.run')
+  const packageCellOutput = document.querySelector('.package.cell .output');
+  const codeCellOutput = document.querySelector('.code.cell .output')
   run.addEventListener('click', async function() {
     // Show "loading" message
-    dependenciesOutput.innerText = 'loading...'
-    codeOutput.innerText = 'loading...'
+    packageCellOutput.innerText = 'loading...'
+    codeCellOutput.innerText = 'loading...'
 
     // Send Request
     const response = await fetch(endpoint, {
@@ -97,14 +97,14 @@
     // Handle Response
     if (!response.ok) return
     const { installation, execution } = await response.json()
-    dependenciesOutput.innerText = installation
-    codeOutput.innerText = execution 
+    packageCellOutput.innerText = installation
+    codeCellOutput.innerText = execution 
   })
 
   // Handle "Tab" button presses
-  const inputCells = document.querySelectorAll('.input')
-  inputCells.forEach(function(inputCell) {
-    inputCell.addEventListener('keydown', function(event) {
+  const cellInputs = document.querySelectorAll('.input')
+  cellInputs.forEach(function(cellInput) {
+    cellInput.addEventListener('keydown', function(event) {
       if (event.key == 'Tab') {
         event.preventDefault()
         document.execCommand('insertHTML', false, '  ')
