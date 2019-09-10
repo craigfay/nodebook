@@ -55,16 +55,16 @@
 </head>
 
 <div class="notebook">
-  <div class="cell">
+  <div class="package cell">
     <div class="title">package.json</div>
-    <div class="input dependencies" contenteditable></div>
-    <div class="output dependencies"></div>
+    <div class="input" contenteditable></div>
+    <div class="output"></div>
   </div>
 
-  <div class="cell">
+  <div class="code cell">
     <div class="title">index.js</div>
-    <div class="input code" contenteditable></div>
-    <div class="output code"></div>
+    <div class="input" contenteditable></div>
+    <div class="output"></div>
   </div>
 
   <button class="run">Run</button>
@@ -74,11 +74,11 @@
   const endpoint = '/api/run'
   const replaceNonBreakingSpaces = str => str.replace(/\u00a0/g, " ")
 
-  const dependencies = document.querySelector('.cell .input.dependencies')
-  const input = document.querySelector('.cell .input.code')
+  const dependencies = document.querySelector('.package.cell .input')
+  const input = document.querySelector('.code.cell .input')
   const run = document.querySelector('.run')
-  const dependenciesOutput = document.querySelector('.output.dependencies');
-  const codeOutput = document.querySelector('.output.code')
+  const dependenciesOutput = document.querySelector('.package.cell .output');
+  const codeOutput = document.querySelector('.code.cell .output')
   run.addEventListener('click', async function() {
     // Show "loading" message
     dependenciesOutput.innerText = 'loading...'
