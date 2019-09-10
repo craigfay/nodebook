@@ -3,6 +3,7 @@
  * an arbitrary Javascript string
  * 
  * @TODO Allow clients to specify node version
+ * @TODO Maybe show clients stderr
  */
 
 import { exec } from 'child_process'
