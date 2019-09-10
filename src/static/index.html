@@ -62,19 +62,19 @@
 <div class="notebook">
   <div class="package cell">
     <div class="title">package.json</div>
-    <div class="input" contenteditable>{"dependencies":{"@node-scarlet/http":"*"}}</div>
+    <div class="input" data-celltype="package" contenteditable>{"dependencies":{"@node-scarlet/http":"*"}}</div>
     <div class="output"></div>
   </div>
 
   <div class="code cell">
     <div class="title">index.js</div>
-    <div class="input" contenteditable>console.log(5);</div>
+    <div class="input" data-celltype="code" contenteditable>console.log(5);</div>
     <div class="output"></div>
   </div>
 
   <div class="text cell">
     <div class="title">Comments</div>
-    <div class="input" contenteditable>
+    <div class="input" data-celltype="text" contenteditable>
       Lorem Ipsum. Mollit excepteur eu mollit esse.
       Eiusmod non ex nulla eiusmod deserunt incididunt id.
       Adipisicing irure tempor do laboris sunt.
@@ -84,7 +84,7 @@
 
   <div class="code cell">
     <div class="title">index.js</div>
-    <div class="input" contenteditable>console.log(10);</div>
+    <div class="input" data-celltype="code" contenteditable>console.log(10);</div>
     <div class="output"></div>
   </div>
 
@@ -92,6 +92,7 @@
 </div>
 
 <script>
+  const notebook = { cells: [] }
   const endpoint = '/api/run'
   const packageCellInput = document.querySelector('.package.cell .input')
   const codeCellInput = document.querySelector('.code.cell .input')
@@ -102,6 +103,14 @@
     // Show "loading" message
     packageCellOutput.innerText = 'loading...'
     codeCellOutput.innerText = 'loading...'
+
+    // Add cells to notebook
+    const cellsInputs = document.querySelectorAll('.cell.input')
+    for (const input of cellInputs) {
+      const { celltype } = input.dataset
+      const content = input.innerText
+      notebook.cells.push({ celltype, content })
+    }
 
     // Send Request
     const response = await fetch(endpoint, {
@@ -130,4 +139,16 @@
       }
     })
   })
+
+  const cellTypes = {
+    package: function packageCell(content) {
+      return { content }
+    },
+    code: function codeCell(content) {
+      return { content }
+    },
+    text: function textCell(content) {
+      return { content }
+    },
+  }
 </script>
