@@ -91,10 +91,10 @@
 
   const packageCellInput = document.querySelector('.package.cell .input')
   const codeCellInput = document.querySelector('.code.cell .input')
-  const submitButton = document.querySelector('.run')
+  const submitButton = document.querySelector('.submit')
   const packageCellOutput = document.querySelector('.package.cell .output');
   const codeCellOutput = document.querySelector('.code.cell .output')
-  run.addEventListener('click', async function() {
+  submitButton.addEventListener('click', async function() {
     // Show "loading" message
     packageCellOutput.innerText = 'loading...'
     codeCellOutput.innerText = 'loading...'
@@ -104,8 +104,8 @@
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
-        dependencies: replaceNonBreakingSpaces(dependencies.innerText),
-        javascript: replaceNonBreakingSpaces(input.innerText),
+        dependencies: replaceNonBreakingSpaces(packageCellOutput.innerText),
+        javascript: replaceNonBreakingSpaces(codeCellOutput.innerText),
       })
     })
 
