@@ -1,16 +1,23 @@
 const build = (...fns) => fns.reduce((v, f) => f(v), []);
 
-function codeCell(source) {
+function codeCell(content) {
   return {
     cellType: 'code',
-    source,
+    content,
+  }
+}
+
+function textCell(content) {
+  return {
+    cellType: 'text',
+    content,
   }
 }
 
 function run(cells) {
   const codeCells = cells.filter(cell => cell.cellType == 'code');
-  const source = codeCells.map(cell => cell.source);
-  eval(source.join('\n'));
+  const contents = codeCells.map(cell => cell.content);
+  eval(contents.join('\n'));
 }
 
 function push(cells, newCell) {
