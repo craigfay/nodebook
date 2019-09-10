@@ -82,6 +82,12 @@
     <div class="output"></div>
   </div>
 
+  <!-- <div class="code cell">
+    <div class="title">index.js</div>
+    <div class="input" contenteditable>console.log(10);</div>
+    <div class="output"></div>
+  </div> -->
+
   <button class="submit">Run</button>
 </div>
 
@@ -104,8 +110,8 @@
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
-        dependencies: replaceNonBreakingSpaces(packageCellOutput.innerText),
-        javascript: replaceNonBreakingSpaces(codeCellOutput.innerText),
+        dependencies: replaceNonBreakingSpaces(packageCellInput.innerText),
+        javascript: replaceNonBreakingSpaces(codeCellInput.innerText),
       })
     })
 
