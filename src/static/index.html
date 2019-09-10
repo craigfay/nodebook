@@ -24,6 +24,7 @@
       color: darkslategray;
     }
     .cell .input {
+      white-space: pre-wrap;
       padding: .6rem;
       font-family: 'Roboto Mono', monospace;
       background-color: whitesmoke;
@@ -98,5 +99,16 @@
     const { installation, execution } = await response.json()
     dependenciesOutput.innerText = installation
     codeOutput.innerText = execution 
+  })
+
+  // Handle "Tab" button presses
+  const inputCells = document.querySelectorAll('.input')
+  inputCells.forEach(function(inputCell) {
+    inputCell.addEventListener('keydown', function(event) {
+      if (event.key == 'Tab') {
+        event.preventDefault()
+        document.execCommand('insertHTML', false, '  ')
+      }
+    })
   })
 </script>
