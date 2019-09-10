@@ -2,7 +2,7 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono&display=swap" rel="stylesheet">
   <style>
     html {
-      font-family: 'Roboto Mono', sans-serif;
+      font-family: 'Roboto', sans-serif;
       font-size: 16px;
     }
     div.notebook {
@@ -24,14 +24,19 @@
       color: darkslategray;
     }
     .cell .input {
-      white-space: pre-wrap;
       padding: .6rem;
-      font-family: 'Roboto Mono', monospace;
       background-color: whitesmoke;
       border-radius: 5px;
     }
     .cell .input:focus {
       outline: none;
+    }
+    .code.cell .input {
+      white-space: pre-wrap;
+      font-family: 'Roboto Mono', monospace;
+    }
+    .text.cell .input {
+      font-family: 'Roboto', sans-serif;
     }
     .cell .output {
       padding: .6rem;
@@ -69,7 +74,11 @@
 
   <div class="text cell">
     <div class="title">Comments</div>
-    <div class="input" contenteditable>Lorem Ipsum</div>
+    <div class="input" contenteditable>
+      Lorem Ipsum. Mollit excepteur eu mollit esse.
+      Eiusmod non ex nulla eiusmod deserunt incididunt id.
+      Adipisicing irure tempor do laboris sunt.
+    </div>
     <div class="output"></div>
   </div>
 
