@@ -1,7 +1,7 @@
 const cellDelimiter = '*endcell*'
 
 // Convert a notebook into a format that can be run by the "run" module
-export function parse(notebook) {
+export function prepareForExecution(notebook) {
   let dependencies
 
   const javascript = notebook.cells.map(cell => {
@@ -11,4 +11,11 @@ export function parse(notebook) {
 
   return { dependencies, javascript }
 }
+
+export function parseExecutionResults({ installation, execution }) {
+  return { installation, execution: execution.split(cellDelimiter) }
+}
+
+
+
 
