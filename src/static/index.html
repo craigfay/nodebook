@@ -116,10 +116,7 @@
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        dependencies: packageCellInput.innerText,
-        javascript: codeCellInput.innerText,
-      })
+      body: JSON.stringify(notebook)
     })
 
     // Handle Response
