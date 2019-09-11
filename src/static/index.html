@@ -98,11 +98,11 @@
   const codeCellInput = document.querySelector('.code.cell .input')
   const submitButton = document.querySelector('.submit')
   const packageCellOutput = document.querySelector('.package.cell .output');
-  const codeCellOutput = document.querySelector('.code.cell .output')
+  const codeCellOutputs = document.querySelectorAll('.code.cell .output')
   submitButton.addEventListener('click', async function() {
     // Show "loading" message
     packageCellOutput.innerText = 'loading...'
-    codeCellOutput.innerText = 'loading...'
+    codeCellOutputs.forEach(output => output.innerText = 'loading...')
 
     // Add cells to notebook object
     const cellInputs = document.querySelectorAll('.cell .input')
@@ -122,8 +122,12 @@
     // Handle Response
     if (!response.ok) return
     const { installation, execution } = await response.json()
+
+    // Apply cell output values as innerText
     packageCellOutput.innerText = installation
-    codeCellOutput.innerText = execution 
+    execution.forEach((cellOutput, index) => {
+      codeCellOutputs[index].innerText = cellOutput
+    })
   })
 
   // Handle "Tab" button presses
