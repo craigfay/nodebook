@@ -1,7 +1,7 @@
 import { resolve, join } from 'path'
 import { promisify } from 'util';
-import { createReadStream, exists } from 'fs';
-const asyncExists = promisify(exists);
+import { createReadStream, stat } from 'fs';
+const asyncStat = promisify(stat);
 
 /**
  * Create a handler that will attempt to serve static files
@@ -9,8 +9,8 @@ const asyncExists = promisify(exists);
  */
 export const staticFiles = path => {
   return async req => {
-    const filepath = join(resolve(path), req.url);
-    if (await asyncExists(filepath))
+    const filepath = join(resolve(path), req.url)
+    if ((await asyncStat(filepath)).isFile())
     return createReadStream(filepath)
   }
 }
