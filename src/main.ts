@@ -5,6 +5,7 @@ import * as notebook from './notebook'
 
 const s = http.server();
 s.route('GET', '/*', staticFiles(__dirname + "/static"));
+s.route('GET', '/codemirror/*', staticFiles(__dirname + "/node_modules"));
 s.route('POST', '/api/run', async (req, meta) => {
   const dependencies = notebook.getDependencies(req.body)
   const javascript = notebook.getExecutable(req.body)
