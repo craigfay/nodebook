@@ -9,8 +9,10 @@ const asyncStat = promisify(stat);
  */
 export const staticFiles = path => {
   return async req => {
-    const filepath = join(resolve(path), req.url)
-    if ((await asyncStat(filepath)).isFile())
-    return createReadStream(filepath)
+    try {
+      const filepath = join(resolve(path), req.url)
+      if ((await asyncStat(filepath)).isFile())
+      return createReadStream(filepath)
+    } catch (e) {}
   }
 }
