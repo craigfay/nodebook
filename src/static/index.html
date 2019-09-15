@@ -1,6 +1,12 @@
 <head>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono&display=swap" rel="stylesheet">
+
+  <!-- CodeMirror -->
+  <script src="codemirror/lib/codemirror.js"></script>
+  <link rel="stylesheet" href="codemirror/lib/codemirror.css">
+  <script src="codemirror/mode/javascript/javascript.js"></script>
+
   <style>
     html {
       font-family: 'Roboto', sans-serif;
@@ -28,6 +34,10 @@
       padding: .6rem;
       background-color: whitesmoke;
       border-radius: 5px;
+    }
+    .CodeMirror {
+      background: none;
+      height: auto;
     }
     .cell .input:focus {
       outline: none;
@@ -63,13 +73,13 @@
 <div class="notebook">
   <div class="package cell">
     <div class="title">package.json</div>
-    <div class="input" data-celltype="package" contenteditable>{"dependencies":{"waverunner":"*"}}</div>
+    <div class="input" data-celltype="package" contenteditable>{"dependencies":{"@node-scarlet/http":"*"}}</div>
     <div class="output"></div>
   </div>
 
   <div class="code cell">
     <div class="title">index.js</div>
-    <div class="input" data-celltype="code" contenteditable>console.log(5);</div>
+    <div class="input" data-celltype="code"></div>
     <div class="output"></div>
   </div>
 
@@ -85,7 +95,7 @@
 
   <div class="code cell">
     <div class="title">index.js</div>
-    <div class="input" data-celltype="code" contenteditable>console.log(10);</div>
+    <div class="input" data-celltype="code"></div>
     <div class="output"></div>
   </div>
 
@@ -94,7 +104,15 @@
 
 <script>
   const notebook = { cells: [] }
+
+  // Use CodeMirror for syntax highlighting on code cells
+  document.querySelectorAll('.code.cell .input').forEach(input => {
+    CodeMirror(input)
+  })
+
   const endpoint = '/api/run'
+  const packageCellInput = document.querySelector('.package.cell .input')
+  const codeCellInput = document.querySelector('.code.cell .input')
   const submitButton = document.querySelector('.submit')
   const packageCellOutput = document.querySelector('.package.cell .output');
   const codeCellOutputs = document.querySelectorAll('.code.cell .output')
@@ -139,7 +157,4 @@
       }
     })
   })
-</script>
-
-<script>
 </script>
