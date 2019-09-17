@@ -7,6 +7,7 @@
  * @TODO Add/Remove Cells
  * @TODO Download Notebook
  * @TODO Remodel Notebook Object
+ * @TODO Make Emojis Easy
  */
 
 import { exec } from 'child_process'
