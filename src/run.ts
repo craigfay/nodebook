@@ -4,7 +4,9 @@
  * 
  * @TODO Allow clients to specify node version
  * @TODO Maybe show clients stderr
- * @TODO Syntax Highlighting
+ * @TODO Add/Remove Cells
+ * @TODO Download Notebook
+ * @TODO Remodel Notebook Object
  */
 
 import { exec } from 'child_process'
