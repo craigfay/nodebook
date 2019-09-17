@@ -54,7 +54,7 @@ export async function run(dependencies:string, javascript:string) {
       const execution = await asyncExec(dockerCommand)
         .catch(e => { throw CONTAINER_ERROR })
 
-      cleanup()
+      // cleanup()
       return {
         installation: installation.stdout,
         execution: execution.stdout,
@@ -62,7 +62,7 @@ export async function run(dependencies:string, javascript:string) {
     }
 
   } catch (e) { // Failure
-    cleanup()
+    // cleanup()
     switch(e) {
       case INSTALL_ERROR:
         return { installation: INSTALL_ERROR }
