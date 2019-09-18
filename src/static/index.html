@@ -73,9 +73,11 @@
 <div class="notebook">
   <div class="package cell">
     <div class="title">package.json</div>
-    <div class="input" data-celltype="package" contenteditable>{"dependencies":{"waverunner":"*"}}</div>
+    <div class="input" data-celltype="package"></div>
     <div class="output"></div>
   </div>
+
+  <!-- {"dependencies":{"waverunner":"*"}} -->
 
   <div class="code cell">
     <div class="title">index.js</div>
@@ -104,11 +106,6 @@
 
 <script>
   const notebook = { cells: [] }
-
-  // Use CodeMirror for syntax highlighted code cells
-  document.querySelectorAll('.code.cell .input').forEach(input => {
-    CodeMirror(input)
-  })
 
   const endpoint = '/api/run'
   const packageCellInput = document.querySelector('.package.cell .input')
@@ -156,5 +153,19 @@
         document.execCommand('insertHTML', false, '  ')
       }
     })
+  })
+
+
+  // Syntax highlighting for package cell
+  CodeMirror(packageCellInput, {
+    mode: { name: 'javascript', json: true },
+    value: '{"dependencies":{"waverunner":"*"}}'
+  });
+  // Syntax highlighting for code cells
+  document.querySelectorAll('.code.cell .input').forEach(input => {
+    CodeMirror(input, {
+      mode: { name: 'javascript' },
+      value: 'console.log("Hello, World!")',
+    });
   })
 </script>
