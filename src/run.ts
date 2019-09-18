@@ -2,13 +2,13 @@
  * Spin up a docker container to execute
  * an arbitrary Javascript string
  * 
- * @TODO Highlight package.json
  * @TODO Allow clients to specify node version
  * @TODO Maybe show clients stderr
  * @TODO Add/Remove Cells
  * @TODO Download Notebook
  * @TODO Remodel Notebook Object
  * @TODO Make Emojis Easy
+ * @TODO Allow file/figure cells
  */
 
 import { exec } from 'child_process'
@@ -66,7 +66,7 @@ export async function run(dependencies:string, javascript:string) {
     }
 
   } catch (e) { // Failure
-    // cleanup()
+    cleanup()
     switch(e) {
       case INSTALL_ERROR:
         return { installation: INSTALL_ERROR }
