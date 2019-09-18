@@ -2,7 +2,7 @@
  * Spin up a docker container to execute
  * an arbitrary Javascript string
  * 
- * @TODO Cache node_modules
+ * @TODO reuse volumes on consecutive executions
  * @TODO Allow clients to specify node version
  * @TODO Maybe show clients stderr
  * @TODO Add/Remove Cells
@@ -10,6 +10,7 @@
  * @TODO Remodel Notebook Object
  * @TODO Make Emojis Easy
  * @TODO Allow file/figure cells
+ * @TODO Consider a plugin architecture
  */
 
 import { exec } from 'child_process'
