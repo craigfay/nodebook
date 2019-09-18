@@ -29,11 +29,6 @@ export async function run(dependencies:string, javascript:string) {
   const hash = randomBytes(16).toString('hex')
   const volume = `/volumes/${hash}`
 
-  // Remove all artifacts after 60 seconds
-  const cleanup = () => setTimeout(function() {
-    asyncExec(`rm -rf ${volume}`)
-  }, 60000)
-
   try {
     // Allocate files for the container to use
     asyncMkdir(volume, { recursive: true }).then(function() {
@@ -60,7 +55,6 @@ export async function run(dependencies:string, javascript:string) {
       const execution = await asyncExec(dockerCommand)
         .catch(e => { throw CONTAINER_ERROR })
 
-      // cleanup()
       return {
         installation: installation.stdout,
         execution: execution.stdout,
@@ -68,7 +62,6 @@ export async function run(dependencies:string, javascript:string) {
     }
 
   } catch (e) { // Failure
-    cleanup()
     switch(e) {
       case INSTALL_ERROR:
         return { installation: INSTALL_ERROR }
